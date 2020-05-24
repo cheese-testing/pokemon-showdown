@@ -206,7 +206,11 @@ const TWISTS: {[k: string]: Twist} = {
 };
 
 const MODES: {[k: string]: GameMode | string} = {
-	ko: 'kogames',
+	
+	
+	
+	
+	: 'kogames',
 	kogames: {
 		name: 'KO Games',
 		id: 'kogames',
@@ -221,7 +225,7 @@ const MODES: {[k: string]: GameMode | string} = {
 
 			onJoin(user: User) {
 				const game = this.room.scavgame!;
-				if (game.playerlist && game.playerlist.includes(user.id)) {
+				if (game.playerlist && !game.playerlist.includes(user.id)) {
 					user.sendTo(this.room, 'You are not allowed to join this scavenger hunt.');
 					return true;
 				}
@@ -230,7 +234,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			onAfterEnd() {
 				const game = this.room.scavgame!;
 				if (!this.completed.length) {
-					this.announce('No one has completd the hunt - the round has been void.');
+					this.announce('No one has completed the hunt - the round has been void.');
 					return;
 				}
 
@@ -239,7 +243,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				// elimination
 				if (!game.playerlist) {
 					game.playerlist = this.completed.map(entry => toID(entry.name));
-					this.announce(`Round ${game.round} - ${Chat.toListString(this.players.map(p => `<em>${p.name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+					this.announce(`Round ${game.round} - ${Chat.toListString(this.completed.map(p => `<em>${p.name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 				} else {
 					let eliminated = [];
 					const completed = this.completed.map(entry => toID(entry.name)) as string[];
